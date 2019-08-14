@@ -2,25 +2,15 @@ import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import * as express from 'express';
 import * as bodyParser from "body-parser";
-// import uiConfig from './config';
 
 const serviceAccount = require("./../../functions/serviceAccountKey.json");
-const firebase = require('firebase');
-const firebaseui = require('firebaseui');
-const ui = new firebaseui.auth.AuthUI(firebase.auth());
-
-// Initialize the FirebaseUI Widget using Firebase.
-
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://wstrn-514a9.firebaseio.com"
 });
 
-// admin.initializeApp(functions.config().firebase);
-
 const db = admin.firestore();
-// const auth = admin.auth();
 
 const app = express();
 const main = express();
@@ -31,25 +21,10 @@ main.use(bodyParser.json());
 export const webApi = functions.https.onRequest(main);
 
 
-ui.start('#firebaseui-auth-container', {
-  signInOptions: [
-    // List of OAuth providers supported.
- {   
-   provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
-   signInMethod: firebase.auth.EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD
-  }
-  ],
-  // Other config options...
-});
-
-
-// landing endpoint
+// landing page
 app.get('/warm', (req, res) => {
     res.send('Warming up friend.');
 })
-
-// The start method will wait until the DOM is loaded.
-// ui.start('#firebaseui-auth-container', uiConfig);
 
 // user registration
 app.post('/signup', async (request, response) => {
@@ -208,7 +183,7 @@ app.post('/fights', async (request, response) => {
   
   });
 
-  // delete a fightq
+  // delete a fight
   app.delete('/fights/:id', async (request, response) => {
     try {
   
